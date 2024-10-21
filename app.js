@@ -7,16 +7,20 @@ const multer= require('multer')
 const path = require('path')
 const axios = require('axios')
 const app = express()
+const cron=require('node-cron')
+
 
 const DBurl = process.env.MongoURL;
 const port = process.env.PORT || 5000;
 
-// Middleware
+//Middleware
 app.use(cors({
-    origin: "https://dealsdray-t9wt.onrender.com"
+    origin: "*"
   }));
+app.use(cors())
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  app.use("/uploads", express.static(path.join(__dirname, "utils", "uploads")));
   
   mongoose.connect(DBurl, {
     useNewUrlParser: true,
@@ -33,4 +37,13 @@ app.use(cors({
     console.log(`Server is running on port ${port}`);
   });
   
-  
+  cron.schedule('*/14 * * * *', () => {
+    console.log('Running cron job to avoid cold start');
+    axios.get('https://dealsdrayclient.onrender.com/users')
+      .then(() => {
+        console.log('Server pinged successfully');
+      })
+      .catch(err => {
+        console.error('Error pinging server:', err);
+      });
+  });

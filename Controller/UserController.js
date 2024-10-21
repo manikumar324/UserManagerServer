@@ -7,6 +7,14 @@ exports.createEmployee = async (req, res) => {
     const { name, email, mobile, designation, gender, course } = req.body;
     console.log(req.body);
 
+    if(!name || !email || !mobile || !designation || !gender || !course){
+      return res.status(400).json({message:"All Fields Required *"})
+    }
+
+    const existEmail=await Employee.findOne({ email })
+    if(existEmail){
+      return res.status(400).json({message:"User with this Email already exists"})
+    }
     
     if (!req.file) {
       return res.status(400).json({ message: "Image file is required." });
@@ -122,7 +130,7 @@ exports.DeleteEmployee = async (req, res) => {
 exports.adminLogin = async(req,res)=>{
     const{text,password}  = req.body
     console.log(req.body)
-    if( password === "DealsDray@123"){
+    if( password === "Manikumar@123"){
         res.status(200).json({message : "Login Success"})
     }
     else{
