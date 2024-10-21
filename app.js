@@ -36,10 +36,14 @@ app.use(cors())
   app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
   });
+
+  app.get("/",async(req,res)=>{
+    res.send("The server is LIVE")
+  })
   
   cron.schedule('*/14 * * * *', () => {
     console.log('Running cron job to avoid cold start');
-    axios.get('https://dealsdrayclient.onrender.com/users')
+    axios.get('https://usermanagerserver.onrender.com')
       .then(() => {
         console.log('Server pinged successfully');
       })
