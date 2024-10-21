@@ -20,7 +20,7 @@ app.use(cors({
 app.use(cors())
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
-  app.use("/uploads", express.static(path.join(__dirname, "utils", "uploads")));
+  app.use("/uploads", express.static(path.join(__dirname, "Utils", "uploads")));
   
   mongoose.connect(DBurl, {
     useNewUrlParser: true,
